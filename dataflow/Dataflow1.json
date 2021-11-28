@@ -10,11 +10,22 @@
 						"type": "LinkedServiceReference"
 					},
 					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "lookuptable",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
 				}
 			],
 			"sinks": [],
-			"transformations": [],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'delta',\n\tcompressionType: 'snappy',\n\tcompressionLevel: 'Fastest',\n\tfileSystem: 'bronze',\n\tfolderPath: 'archive.zip') ~> source1"
+			"transformations": [
+				{
+					"name": "Join1"
+				}
+			],
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'delta',\n\tcompressionType: 'snappy',\n\tcompressionLevel: 'Fastest',\n\tfileSystem: 'bronze',\n\tfolderPath: 'archive.zip') ~> source1\nsource(output(\n\t\ttype as string,\n\t\ttype_val as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> source2\nsource1, source2 join(ERROR_FUNCTION('') == ERROR_FUNCTION(''),\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> Join1"
 		}
 	}
 }
