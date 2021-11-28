@@ -1,0 +1,32 @@
+{
+	"name": "silverDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageDefault",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "silver"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "type",
+				"type": "UTF8"
+			},
+			{
+				"name": "step",
+				"type": "INT32"
+			},
+			{
+				"name": "payment_agg",
+				"type": "INT64"
+			}
+		]
+	}
+}
